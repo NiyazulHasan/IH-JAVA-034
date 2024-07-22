@@ -1,0 +1,425 @@
+step29:
+--------
+	Create a HeaderComponent.js inside "src/components" folder.
+	ex:
+	HeaderComponent.js
+	---------------------
+ 	import React, { Component } from 'react'
+
+	export default class HeaderComponent extends Component {
+  	render() {
+    	return (
+      	<div>
+            	<header>
+                <nav className='navbar navbar-expand-md navbar-dark bg-dark'>
+                	    <div className="container">
+          <a href="" className='navbar-brand '>Employee Management System</a>
+                    	</div>
+                	</nav>
+         	   </header>
+      	</div>
+    	)
+  	}
+	}
+
+
+step30:
+--------
+	Create a FooterComponent.js inside "src/components" folder.
+	ex:
+	FooterComponent.js
+	-----------------
+	import React, { Component } from 'react'
+
+	export default class FooterComponent extends Component {
+ 	 render() {
+    	return (
+      	<div>
+        	<footer className='footer'>
+       <span className='text-muted'>All Right Reserved 2024 &copy;NIYAZ_SIR </span>
+        </footer>
+     	 </div>
+    	)
+  	}
+	}
+
+step31:
+---------
+	Now add footer styles in App.css file.
+	ex:
+	App.css
+	--------
+	.footer
+	{
+  	position:absolute;
+  	bottom: 0;
+  	width: 100%;
+  	height: 30px;
+  	background-color: black;
+  	text-align: center;
+  	color: white;
+  	line-height: 20px;
+	}
+
+step32:
+------
+	Now call "HeaderComponent" and "FooterComponent" from App.js file.
+	ex:
+	App.js
+	-------
+	import logo from './logo.svg';
+	import '../App.css';
+	import ListEmployeeComponent from './components/ListEmployeeComponent'
+	import HeaderComponent from './components/HeaderComponent';
+	import FooterComponent from './components/FooterComponent';
+	function App() {
+  	return (
+    	<div>
+
+	    <HeaderComponent/>
+
+	    <div className="container">
+      		<ListEmployeeComponent/>
+     	    </div>
+    
+    	<FooterComponent/>
+
+ 	   </div>
+  	);
+	}
+
+	export default App;
+
+step33:
+--------
+	Install react Router.
+	ex:
+	 Reactprojects/react-frontend>npm install react-router-dom 
+
+step34:
+------
+	Configure the routing inside App.js file.
+	ex:
+App.js
+--------------
+import React from 'react'
+import ListEmployeeComponent from './components/ListEmployeeComponent'
+import FooterComponent from './components/FooterComponent'
+import HeaderComponent from './components/HeaderComponent'
+import './App.css';
+import {BrowserRouter,Routes,Route} from 'react-router-dom';
+
+export default function App() 
+{
+  return (
+    <div>
+            <HeaderComponent/>
+
+            <BrowserRouter>
+
+            <div className='container'>
+                  <Routes>
+                          <Route exact path='/'  element={<ListEmployeeComponent/>}></Route>
+                          <Route path="/employees" element={<ListEmployeeComponent/>}></Route>
+                  </Routes>
+            </div>
+            </BrowserRouter>
+
+            <FooterComponent/>
+    </div>
+  )
+}
+
+
+step35:
+------
+	Test the routing files.
+	ex:
+		http://localhost:3000/
+		http://localhost:3000/employees
+
+step36:
+-------
+	Create a post method inside EmployeeController.java file.
+	
+Employee Controller.java
+-------------------------
+package com.ihub.www.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ihub.www.model.Employee;
+import com.ihub.www.service.EmployeeService;
+
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+@RequestMapping("/api/v1/")
+public class EmployeeController 
+{
+	@Autowired
+	EmployeeService employeeService;
+	
+	@GetMapping("/employees")
+	public List<Employee> getAllEmployees()
+	{
+		return employeeService.getAllEmployees();
+	}
+	
+	@PostMapping("/employees")
+	public Employee createEmployee(@RequestBody Employee employee)
+	{
+		return employeeService.createEmployee(employee);
+	}
+}
+
+step36:
+-------
+	Create a service method inside EmployeeService.java file.
+	
+EmployeeService.java
+-------------------
+package com.ihub.www.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.ihub.www.model.Employee;
+import com.ihub.www.repo.EmployeeRepository;
+
+@Service
+public class EmployeeService 
+{
+	@Autowired
+	EmployeeRepository employeeRepository;
+	
+	public List<Employee> getAllEmployees()
+	{
+		return employeeRepository.findAll();
+	}
+	
+	public Employee createEmployee(Employee employee)
+	{
+		return employeeRepository.save(employee);
+	}
+}
+
+step37:
+-------
+	Relaunch the spring boot starter project.
+
+step38:
+-------
+	Create a "CreateEmployeeComponent.js" file inside "src/components" folder.
+ 	ex:
+	
+CreateEmployeeComponent.js
+------------------------
+export default function CreateEmployeeComponent() {
+ 
+    return (
+      <div>
+        <h1>Create Employee</h1>
+      </div>
+    )
+
+}
+
+step39:
+------
+	Add CreateEmployeeComponent.js file for routing inside App.js.
+
+App.js
+--------
+import logo from './logo.svg';
+import './App.css';
+import ListEmployeeComponent from './components/ListEmployeeComponent'
+import HeaderComponent from './components/HeaderComponent';
+import FooterComponent from './components/FooterComponent';
+import { BrowserRouter as Router,Route,Routes,Link } from 'react-router-dom';
+import CreateEmployeeComponent from './components/CreateEmployeeComponent';
+function App() {
+  return (
+    <div>
+     <Router>
+      <HeaderComponent/>
+      <div className="container">
+        <Routes>
+            <Route exact path="/" element={<ListEmployeeComponent/>}></Route>
+            <Route path="/employees" element={<ListEmployeeComponent/>}></Route>
+            <Route path="/add-employee" element={<CreateEmployeeComponent/>}></Route>
+        </Routes>
+      </div>
+
+      <FooterComponent/>
+    
+    </Router> 
+
+    </div>
+  );
+}
+
+export default App;
+
+
+step40:
+------
+	Create a  add employee button inside "ListEmployeeComponent.js" file.
+
+ListEmployeeComponent.js
+--------------------------
+import React, { Component } from 'react'
+import EmployeeService from '../services/EmployeeService';
+import {Link } from 'react-router-dom';
+export default class ListEmployeeComponent extends Component {
+
+     
+
+    constructor(props)
+    {
+        super(props);
+
+        this.state={
+            employees:[]
+        }
+     
+    }
+  
+  
+
+    componentDidMount(){
+        EmployeeService.getEmployees().then((res)=>
+        {
+            this.setState({employees:res.data})
+        })
+    }
+
+
+  render() {
+    return (
+      <div>
+            <h2 className='text-center'>Employee List</h2>
+
+          
+            <div className='row mt-5'>       
+            <Link to="/add-employee" className='btn btn-outline-primary mt-4'>Add Employee</Link>    
+   
+                <table className='table  table-striped table-bordered'>
+                    <thead>
+                        <tr>
+                          
+                            <th>FirstName</th>
+                            <th>LastName</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.employees.map(
+                                employee=>
+                                <tr key={employee.id}>
+				      <td>{employee.id}</td>
+                                      <td>{employee.firstName}</td>
+                                      <td>{employee.lastName}</td>
+                                      <td>{employee.email}</td> 
+                                      
+                                </tr>
+                            )
+                        }
+                    </tbody>
+                </table>
+            </div>        
+      </div>
+    )
+  }
+}
+
+
+step41:
+--------
+	Now create a form to add a employee in CreateEmployeeComponent.js file.
+
+CreateEmployeeComponent.js
+---------------------------
+import React, { Component, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import EmployeeService from '../services/EmployeeService';
+
+export default function CreateEmployeeComponent()
+{
+  
+    let navigate = useNavigate();
+    
+    const [employee,setEmployee]=useState({
+        firstName:"",
+        lastName:"",
+        email:""
+      })
+
+
+  const handleClick=(e)=>{
+    const name=e.target.name;
+    const value=e.target.value;
+    setEmployee({... employee,[name]:value});
+  }    
+
+  const saveHandler=(e)=>
+  {
+      e.preventDefault();
+      console.log("employee =>"+JSON.stringify(employee));
+     
+  }
+
+  
+  const cancelHandler=(e)=>
+  {
+    navigate('/employees');
+  }
+ 
+  
+    return (
+      <div className="container mt-3">
+          <div className="row">
+            <div className="card col-md-6 offset-md-3 offset-md-3">
+              <h3 className="text-center">Add Employee</h3>
+              <div className="card-body">
+                <form>
+                  <div className="form-group my-2">
+                    <label>First Name:</label>
+                    <input placeholder="First Name" name="firstName" className="form-control"
+                           value={employee.firstName} onChange={handleClick}/>
+                  </div>
+                  <div className="form-group my-2">
+                    <label>Last Name:</label>
+                    <input placeholder="Last Name" name="lastName" className="form-control"
+                           value={employee.lastName} onChange={handleClick}/>
+                  </div>
+
+                  <div className="form-group my-2">
+                    <label>Email:</label>
+                    <input placeholder="Email" name="email" className="form-control"
+                           value={employee.email} onChange={handleClick}/>
+                  </div>
+                  <button className='btn btn-success' onClick={saveHandler}>save</button>
+                  <button className='btn btn-danger' onClick={cancelHandler} style={{marginLeft:"10px"}}>cancel</button>
+                </form>
+              </div>
+            </div>
+          </div>  
+      </div>
+
+    )
+  }
+
+

@@ -1,0 +1,186 @@
+Java Project
+============
+Title		:	Employee Management System
+
+Client		:	Codetru / Orchasp / Sutisoft 
+
+Environments	:	Core Java, ReactJS, Spring Boot.
+
+Tools		:	Maven, GIT/GITHUB and POSTMAN.
+
+IDE's		:	STS and VSC.
+
+Database	:	MySQL
+
+Team Size	:	3
+
+Duration	:	1 Month 
+
+
+Note:
+-----
+To develop any microservice in spring boot we need to follow layered architecture. 
+
+Diagram: Project-Day1
+
+
+Project Structure 
+----------------
+
+backend-springboot
+|
+|---src/main/java
+|	|
+	|---com.ihub.www
+		|
+		|---BackendSpringboot.java
+
+	|---com.ihub.www.controller	
+		|
+		|---EmployeeController.java
+	|
+	|---com.ihub.www.service	
+		|
+		|---EmployeeService.java
+	|
+	|---com.ihub.www.repo	
+		|
+		|---EmployeeRepository.java (Interface)
+	|
+	|---com.ihub.www.model
+		|
+		|---Employee.java
+	|
+	|---com.ihub.www.exception 	
+		|
+		|---ResourceNotFoundException.java
+
+
+|---src/main/resources
+|	|
+	|---application.properties
+
+|---src/test/java
+|
+|---pom.xml 	
+
+
+step1:
+-----
+	Create a spring boot starter project i.e backend-springboot.
+	ex:
+		starters:
+				Spring Web 
+				Spring Data JPA 
+				MySQL Driver
+				Spring Boot DevTools
+				Lombok  
+
+step2:
+------	
+	Connect to MySQL Database and create a "employee_management_system" schema. 
+
+	ex:
+		MYSQL> show databases;
+		MYSQL> create schema employee_management_system;
+
+
+step3:
+------
+	Create employees table  with records inside "employee_management_system" schema.
+
+	ex:
+		MYSQL> use  employee_management_system;
+
+		MYSQL> 	create table employees(
+					id  int(3) AUTO_INCREMENT,
+					first_name varchar(10),
+					last_name varchar(10),
+					email  varchar(15),
+					primary key(id)
+				);
+
+		MYSQL> insert into employees values(1,'Alan','Morries','alan@gmail.com');
+		MYSQL> insert into employees values(2,'Erick','Anderson','erick@zoho.com');
+		MYSQL> commit; 
+
+
+step4:
+-----
+	Configure MySQL Database and server port in application.properties file.
+
+application.properties 
+----------------------
+server.port=9191
+
+spring.datasource.driverClassName= com.mysql.cj.jdbc.Driver
+spring.datasource.url= jdbc:mysql://localhost:3306/employee_management_system
+spring.datasource.username= root
+spring.datasource.password= root
+
+spring.jpa.hibernate.ddl-auto= update
+spring.jpa.properties.hibernate.dialect= org.hibernate.dialect.MySQL8Dialect
+
+
+step5:
+------
+	Create a Employee model class inside "com.ihub.www.model" package.
+
+Employee.java
+------------
+package com.ihub.www.model;
+
+import org.hibernate.annotations.GeneratorType;
+
+import jakarta.annotation.Generated;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name="employees")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Employee
+{
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
+	@Column
+	private String firstName;  
+	
+	@Column
+	private String lastName;  
+	
+	@Column
+	private String email;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	 
+
+			
